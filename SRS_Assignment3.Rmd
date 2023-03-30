@@ -1,0 +1,14 @@
+---
+title: |
+  <center> University of Edinburgh, School of Mathematics </center>
+  <center> Statistical Research Skills (MATH11188) </center>
+  <center> Assignment 3 </center>
+author: "E. Antypas, S. Liu, C.Giannikos, Y. Gu"
+date: "07/04/2023"
+output:
+  pdf_document: default
+  html_document:
+    
+    df_print: paged
+---
+
