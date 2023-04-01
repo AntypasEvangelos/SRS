@@ -12,3 +12,30 @@ output:
     df_print: paged
 ---
 
+
+```{r, include = TRUE, message = FALSE}
+data <- c(1, 1, 1, 15, 0, 3, 19, 54, 4, 19, 62, 464, 76, 703, 1006) # Read in the data
+LA <- c(1,1,1,1,1,1,1,1,0,0,0,0,0,0,0) 
+NG <- c(1,1,1,1,0,0,0,0,1,1,1,1,0,0,0) 
+PF <- c(1,0,1,0,1,0,1,0,1,0,1,0,1,0,1) 
+GO <- c(1,1,0,0,1,1,0,0,1,1,0,0,1,1,0)
+
+# model with all possible interactions
+model.full <- glm(data~LA+NG+PF+GO
+                  +LA:NG+LA:PF+LA:GO
+                  +NG:PF+NG:GO+PF:GO, family=poisson(link="log"))
+# summary(model.full)
+
+# relative goodness-of-fit
+library(MASS)
+stepAIC(model.full, direction="both") 
+## AIC=96.83
+## data ~ LA + NG + PF + GO + LA:NG + LA:PF + NG:GO
+
+model.select <- glm(data~LA+NG+PF+GO+LA:NG+LA:PF+NG:GO, family=poisson(link="log"))
+summary(model.select)
+
+# absolute goodness-of-fit
+plot(model.select)
+```
+
