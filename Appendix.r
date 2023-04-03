@@ -26,9 +26,26 @@ model.full <- glm(data~LA+NG+PF+GO
                   +NG:PF+NG:GO+PF:GO, family=poisson(link="log"))
 
 library(MASS)
+
+# Model selection based on AIC (backward)
 model.select <- stepAIC(model.full, direction="both") 
 ## Summary
 summary(model.select)
+
+# model with no interactions
+model.reduced <- glm(data~LA+NG+PF+GO, family=poisson(link="log"))
+
+
+# Forward model selection based on AIC
+stepAIC(model.reduced, scope=list(lower= formula(model.reduced),upper=formula(model.full)),direction="forward")
+
+# Model selection based on AIC 
+stepAIC(model.full, direction="both", criterion="BIC") 
+
+
+
+
+
 
 ## P-value for goodness of fit
 1-pchisq(summary(model.select)$deviance, summary(model.select)$df.residual)
