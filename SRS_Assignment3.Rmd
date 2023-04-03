@@ -2,7 +2,7 @@
 title: |
   <center> University of Edinburgh, School of Mathematics </center>
   <center> Statistical Research Skills (MATH11188) </center>
-  <center> Assignment 3 </center>
+  <center> Assignment 3 ,Group Scientific Report</center>
 author: "E. Antypas, S. Liu, C.Giannikos, Y. Gu"
 date: "07/04/2023"
 output:
@@ -13,29 +13,43 @@ output:
 ---
 
 
-```{r, include = TRUE, message = FALSE}
-data <- c(1, 1, 1, 15, 0, 3, 19, 54, 4, 19, 62, 464, 76, 703, 1006) # Read in the data
-LA <- c(1,1,1,1,1,1,1,1,0,0,0,0,0,0,0) 
-NG <- c(1,1,1,1,0,0,0,0,1,1,1,1,0,0,0) 
-PF <- c(1,0,1,0,1,0,1,0,1,0,1,0,1,0,1) 
-GO <- c(1,1,0,0,1,1,0,0,1,1,0,0,1,1,0)
+\section{\underline{Introduction}}
+This report performs exploratory analysis in the data of potential victims as 
+recorded by four different types of organisations and obtains an estimation 
+regarding the scale of modern slavery in the UK. The analysis is conducted through
+the implementation of the multiple systems estimation technique in the given 
+lists of recorded victims. 
 
-# model with all possible interactions
-model.full <- glm(data~LA+NG+PF+GO
-                  +LA:NG+LA:PF+LA:GO
-                  +NG:PF+NG:GO+PF:GO, family=poisson(link="log"))
-# summary(model.full)
+Because the data have been collected through different resources, the victim 
+coverage is only partial. The figure of 2428 victims, as recorded 
+in the four given lists, contains only cases which were encountered and recorded
+by at least one of the organisations. As a result, it does not include the 
+potential victims which were not encountered by any of the four. 
+Therefore, a multiple systems estimation approach can be used to estimate the 
+unknown number of cases that have not come to attention. 
 
-# relative goodness-of-fit
-library(MASS)
-stepAIC(model.full, direction="both") 
-## AIC=96.83
-## data ~ LA + NG + PF + GO + LA:NG + LA:PF + NG:GO
 
-model.select <- glm(data~LA+NG+PF+GO+LA:NG+LA:PF+NG:GO, family=poisson(link="log"))
-summary(model.select)
+\section{\underline{Statistical Model/Methodology/Analysis }}
+\subsection{1. Model Selection}
 
-# absolute goodness-of-fit
-plot(model.select)
-```
+Since $y_{0000}|\mu_{0000}\sim Poisson(\mu_{0000})$ and $log(\mu_{000})=\beta_0,$ the 
+estimate of the true total of potential victims is
+$$ \hat{N}= exp(\hat{\beta}_0)+n .$$
+For the purposes mentioned above, a Generalised Linear Model from the Poisson family with a log-link function was fitted to the observed data in R. At first, a glm considering the main effects from all four lists, as well as all the two-way interactions between them, was fitted. Then, the routine stepAIC was used to fit log-linear models, firstly considering the full model, and then deducting interaction effects stepwise, at each stage removing the term which offers the least information, i.e the lowest AIC, stopping at the point where further removal would result in a worse fit according to the AIC. 
+
+The model finally chosen for the four-list data contains all the main effects of the four lists and three of their six possible interactions, namely $LA \times NG$,$LA \times PF$ and $NG \times GO.$ It must be noted that both a forward stepwise routine based on the AIC, as well as stepwise model selection routines based on the BIC (Bayesian Information Criterion) yield the exact same model. 
+
+
+\subsection{2.Testing Goodness of Fit}
+
+The deviance of a glm is an appropriate measure for goodness of fit, since it demonstrates the difference between the log-likelihood of said model and of a model that perfectly fits the data. Here, the deviance of the fitted model was 11.3 on 7 degrees of freedom. Additionally, in the Deviance Residual Plot for the model (Figure 1), the deviance residuals are evenly distributed around the x-axis, and do not demonstrate a systematic pattern, thus the goodness of fit hypothesis is not violated.
+
+![Deviance Residuals Plot]("C:/Users/chrgi/Desktop/Semester 2 Courses/Statistical Research Skills/SRS-main/Deviance Residuals Plot.jpeg")
+
+\section{\underline{Result Summary}}
+
+The model finally chosen for the four-list data provides an estimated total population size of 11015 with a standard error of 800. A 95% confidence interval is given by $[9447, 12583].$ Additionally, as demonstrated in the result output below, there is positive correlation between LA and each of NG and PF. This implies that being known to the local authority increases the chance of being known to NGOs or the police. However, there is a negative correlation between NG and GO, which implies that there exists a percentage of cases known to NGOs but unknown to Government agencies.
+
+
+![R Model Output]("C:/Users/chrgi/Desktop/Semester 2 Courses/Statistical Research Skills/SRS-main/Model Output.jpg")
 
