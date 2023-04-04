@@ -39,7 +39,7 @@ model.reduced <- glm(data~LA+NG+PF+GO, family=poisson(link="log"))
 # Forward model selection based on AIC
 stepAIC(model.reduced, scope=list(lower= formula(model.reduced),upper=formula(model.full)),direction="forward")
 
-# Model selection based on AIC 
+# Model selection based on BIC 
 stepAIC(model.full, direction="both", criterion="BIC") 
 
 
@@ -69,6 +69,6 @@ N_hat <- y_hat+n
 N_se <- y_hat* beta_0_se
 
 # Step 4: Calculate the 95% confidence interval for y=exp(beta_0)
-lb_ci <- N_hat -y_se*1.96 
-ub_ci <- N_hat +y_se*1.96 
+lb_ci <- N_hat - N_se*1.96 
+ub_ci <- N_hat + N_se*1.96 
 N_ci <- c(lb_ci,ub_ci)
