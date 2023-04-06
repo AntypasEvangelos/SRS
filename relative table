@@ -1,0 +1,9 @@
+$$
+\begin{array}{c|c|c||c|c}
+\text { Model } & \text { Estimates } & \text { Standard error } & \text { P-value } & \Delta \text { AIC } \\
+\hline Full\ model & 9094.544 & 3814.476 & 0.042 & 4.585 \\
+\{LA \times NG\},\{LA\times PF\},\{LA \times GO\},\{NG\times PF\},\{NG\times GO\} & 9151.518 & 1112.742 & 0.077 & 2.585 \\
+\{LA \times NG\},\{LA\times PF\},\{NG\times PF\},\{NG\times GO\} & 9273.860 & 1103.588 & 0.117 & 0.837 \\
+\{LA\times NG\},\{LA\times PF\},\{NG\times GO\} & 8587.244 & 799.899 & 0.124 & 0.000
+\end{array}
+$$
